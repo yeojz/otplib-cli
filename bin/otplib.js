@@ -36,7 +36,7 @@ program
 program
   .command('init')
   .description('initialise a new configuration')
-  .option('-l, --keylength [len]', 'length of secret key', 32)
+  .option('-l, --keylength [len]', 'length of secret key', 20)
   .option('-o, --output [filename]', 'output file. default: .otplib.json', DEFAULT_FILENAME)
   .action(initialise);
 
@@ -144,6 +144,10 @@ function initialise(opts){
   }
 }
 
+function code(token) {
+  return '[code] ' + token;
+}
+
 function generate(opts) {
   const config = getConfig(opts);
 
@@ -156,20 +160,22 @@ function generate(opts) {
 
   const otp = otplib[cli.mode];
   otp.options = options;
-  console.log('\nMode: ' + cli.mode);
 
-  let spinner = ora('generating').start();
+  console.log('');
+  ora().succeed('[mode] ' + cli.mode);
+
+  let spinner = ora(code('generating')).start();
 
   setTimeout(() => {
     if (cli.mode === 'hotp') {
       const counter = Number(options.counter);
       const token = otp.generate(cli.secret, counter);
-      spinner.succeed(token);
+      spinner.succeed(code(token));
       return;
     }
 
     // Start TOTP / Authenticator
-    spinner.text = otp.generate(cli.secret);
+    spinner.text = code(otp.generate(cli.secret));
 
     setInterval(() => {
       let time = new Date().getTime();
@@ -177,11 +183,11 @@ function generate(opts) {
 
       if (epoch % 30 === 0){
         spinner.color = 'green';
-        spinner.text = otp.generate(cli.secret);
+        spinner.text = code(otp.generate(cli.secret));
       }
     }, 1000);
-  }, 2000);
 
+  }, 2000);
 }
 
 function verify(token, opts) {
