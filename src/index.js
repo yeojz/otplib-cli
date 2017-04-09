@@ -1,2 +1,2 @@
-var otplib = require('otplib');
+var otplib = require('otplib').default;
 module.exports = otplib;
