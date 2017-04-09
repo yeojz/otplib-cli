@@ -1,0 +1,23 @@
+{
+  "name": "otplib-cli",
+  "version": "1.0.0",
+  "description": "CLI for otplib",
+  "main": "src/index.js",
+  "bin": {
+    "otplib": "bin/otplib.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "otp"
+  ],
+  "author": "Gerald Yeo <contact@fusedthought.com>",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "lodash.omit": "^4.5.0",
+    "lodash.pick": "^4.4.0",
+    "ora": "^1.2.0"
+  }
+}
