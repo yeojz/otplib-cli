@@ -6,16 +6,21 @@ const otplib = require('otplib').default;
 const path = require('path');
 const pick = require('lodash.pick');
 const program = require('commander');
+const QR = require('qrcode');
+
 const pkg = require('../package.json');
 
 const DEFAULT_FILENAME = 'otplib.json';
+const DEFAULT_QRCODE_FILENAME = 'otplib-qrcode.png';
 const CLI_OPTIONS = [
   'config',
   'epoch',
   'keylength',
   'mode',
   'output',
-  'secret'
+  'secret',
+  'service',
+  'user'
 ];
 const SUPPORT_ALGORITHM = [
   'sha1',
@@ -37,7 +42,7 @@ program
   .command('init')
   .description('initialise a new configuration')
   .option('-l, --keylength [len]', 'length of secret key', 20)
-  .option('-o, --output [filename]', 'output file. default: .otplib.json', DEFAULT_FILENAME)
+  .option('-o, --output [filename]', 'output file. default: otplib.json', DEFAULT_FILENAME)
   .action(initialise);
 
 program
@@ -52,6 +57,14 @@ program
   .description('validate a token against the setting or configuration')
   .action(verify);
 
+program
+  .command('qrcode')
+  .option('--user [name]', 'user to associate with this', 'my token')
+  .option('--issuer [name]', 'your service name', 'otplib')
+  .option('--keyuri', 'show the key uri instead of QR Code')
+  .option('-o, --output [filename]', 'output file. default: otplib-qrcode.png', DEFAULT_QRCODE_FILENAME)
+  .description('generate a QR Code from configuration')
+  .action(qrcode);
 
 program.parse(process.argv);
 
@@ -100,8 +113,13 @@ function initialise(opts){
     spinner.fail('A configuration file of the same name already exists');
 
   } catch (e) {
-    config.secret = otplib.authenticator.generateSecret(Number(opts.keylength));
-    config.mode = program.mode ? program.mode.toLowerCase() : 'hotp';
+    config.secret = otplib.authenticator
+      .generateSecret(Number(opts.keylength));
+
+    config.mode = program.mode
+      ? program.mode.toLowerCase()
+      : 'hotp';
+
     config.digits = program.digits;
 
     if (config.mode === 'totp') {
@@ -144,8 +162,33 @@ function initialise(opts){
   }
 }
 
-function code(token) {
-  return '[code] ' + token;
+function line(token, text = 'code') {
+  return '[' + text + '] ' + token;
+}
+
+function createGenerator(otp, config, display) {
+  display.color = 'green';
+
+  let token = otp.generate(config.cli.secret);
+  const yellow = Math.ceil(config.options.step / 2);
+
+  return function generator() {
+    const epoch = Math.floor(new Date().getTime() / 1000.0);
+    const count = epoch % config.options.step;
+    const timeLeft = config.options.step - count;
+
+    if (timeLeft < 5) {
+      display.color = 'red';
+    } else if (timeLeft < yellow) {
+      display.color = 'yellow';
+    }
+
+    if (count === 0){
+      token = otp.generate(config.cli.secret);
+      display.color = 'green';
+    }
+    display.text = line(token, timeLeft + 's');
+  }
 }
 
 function generate(opts) {
@@ -155,37 +198,24 @@ function generate(opts) {
     return;
   }
 
-  const options = config.options;
-  const cli = config.cli;
-
-  const otp = otplib[cli.mode];
-  otp.options = options;
+  const otp = otplib[config.cli.mode];
+  otp.options = config.options;
 
   console.log('');
-  ora().succeed('[mode] ' + cli.mode);
+  ora().succeed(line(config.cli.mode, 'mode'));
 
-  let spinner = ora(code('generating')).start();
+  let display = ora(line('generating')).start();
 
   setTimeout(() => {
-    if (cli.mode === 'hotp') {
-      const counter = Number(options.counter);
-      const token = otp.generate(cli.secret, counter);
-      spinner.succeed(code(token));
+    if (config.cli.mode === 'hotp') {
+      const counter = Number(config.options.counter);
+      const token = otp.generate(config.cli.secret, counter);
+      display.succeed(line(token));
       return;
     }
 
     // Start TOTP / Authenticator
-    spinner.text = code(otp.generate(cli.secret));
-
-    setInterval(() => {
-      let time = new Date().getTime();
-      let epoch = Math.floor(time / 1000.0);
-
-      if (epoch % 30 === 0){
-        spinner.color = 'green';
-        spinner.text = code(otp.generate(cli.secret));
-      }
-    }, 1000);
+    setInterval(createGenerator(otp, config, display), 1000);
 
   }, 2000);
 }
@@ -196,4 +226,29 @@ function verify(token, opts) {
   if (config == null) {
     return;
   }
+}
+
+function qrcode(opts) {
+  const config = getConfig(opts);
+
+  let text = otplib.authenticator
+    .keyuri(opts.user, opts.issuer, config.cli.secret);
+
+  text = decodeURIComponent(text);
+
+  if (opts.keyuri) {
+    ora().succeed('[keyuri] ' + text);
+    return;
+  }
+
+  QR.toFile(opts.output, text, {
+    errorCorrectionLevel: 'M'
+  }, function(err) {
+    if (err) {
+      ora().fail('[qrcode] Failed');
+      return;
+    }
+
+    ora().succeed('[qrcode] Saved to file: ' + opts.output);
+  });
 }

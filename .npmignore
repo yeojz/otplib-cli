@@ -16,3 +16,4 @@ webpack.config.js
 
 /otplib.json
 /otplib-*.json
+/otplib-*.png

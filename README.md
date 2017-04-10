@@ -15,25 +15,26 @@ $ npm install --global otplib-cli
 ## Usage
 
 ```
-Usage: otplib [options] [command]
+  Usage: otplib [options] [command]
 
 
- Commands:
+  Commands:
 
-   init [options]       initialise a new configuration
-   generate [options]   generate new tokens
-   verify [token]       validate a token against the setting or configuration
+    init [options]       initialise a new configuration
+    generate [options]   generate new tokens
+    verify [token]       validate a token against the setting or configuration
+    qrcode [options]     generate a QR Code from configuration
 
- Options:
+  Options:
 
-   -h, --help              output usage information
-   -V, --version           output the version number
-   -k, --secret [key]      provide a secret key
-   -c, --config [path]     path to configuration file
-   -m, --mode [mode]       operation mode. (hotp | totp | authenticator)
-   -d, --digits [number]   number of digits in token
-   -a, --algorithm [type]  algorithm to generate for totp (sha1 | sha256 | sha512)
-   -s, --step [number]     time step (totp / authenticator)
+    -h, --help              output usage information
+    -V, --version           output the version number
+    -k, --secret [key]      provide a secret key
+    -c, --config [path]     path to configuration file
+    -m, --mode [mode]       operation mode. (hotp | totp | authenticator)
+    -d, --digits [number]   number of digits in token
+    -a, --algorithm [type]  algorithm to generate for totp (sha1 | sha256 | sha512)
+    -s, --step [number]     time step (totp / authenticator)
 ```
 
 ## Related
