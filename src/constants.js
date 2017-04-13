@@ -1,5 +1,6 @@
 const DEFAULT_FILENAME = 'otplib.json';
 const DEFAULT_QRCODE_FILENAME = 'otplib-qrcode.png';
+
 const CLI_OPTIONS = [
   'config',
   'epoch',
@@ -10,6 +11,7 @@ const CLI_OPTIONS = [
   'service',
   'user'
 ];
+
 const SUPPORT_ALGORITHM = [
   'sha1',
   'sha256',
@@ -17,8 +19,8 @@ const SUPPORT_ALGORITHM = [
 ];
 
 module.exports = {
+  CLI_OPTIONS,
   DEFAULT_FILENAME,
   DEFAULT_QRCODE_FILENAME,
-  CLI_OPTIONS,
   SUPPORT_ALGORITHM
 }

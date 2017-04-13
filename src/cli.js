@@ -41,6 +41,8 @@ program
 program
   .command('verify [token]')
   .description('validate a token against the setting or configuration')
+  .option('-e, --epoch [number]', 'time since UNIX epoch (totp / authenticator)')
+  .option('--counter [number]', 'current counter for HOTP', 0)
   .action((token, opts) => (
     verify(cwd, program, token, opts)
   ));
