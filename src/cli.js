@@ -13,6 +13,7 @@ const cwd = process.cwd();
 
 program
   .version(pkg.version)
+  .option('-p, --password [password]', 'password to encrypt/decrypt the secret')
   .option('-k, --secret [key]', 'provide a secret key')
   .option('-c, --config [path]', 'path to configuration file', constants.DEFAULT_FILENAME)
   .option('-m, --mode [mode]', 'operation mode. (hotp | totp | authenticator)')

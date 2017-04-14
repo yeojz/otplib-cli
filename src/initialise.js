@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 
 const constants = require('./constants');
+const endec = require('./endec');
 const getConfig = require('./getConfig');
 
 function initialise(cwd, program, opts){
@@ -20,6 +21,10 @@ function initialise(cwd, program, opts){
   } catch (e) {
     config.secret = otplib.authenticator
       .generateSecret(Number(opts.keylength));
+
+    if (program.password) {
+      config.secret = endec.encrypt(program.password, config.secret);
+    }
 
     config.mode = program.mode
       ? program.mode.toLowerCase()

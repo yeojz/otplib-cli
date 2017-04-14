@@ -3,7 +3,9 @@
 const path = require('path');
 const omit = require('lodash.omit');
 const pick = require('lodash.pick');
+
 const constants = require('./constants');
+const endec = require('./endec');
 
 function getConfig(cwd, program, options = {}) {
   var config = {}
@@ -28,6 +30,10 @@ function getConfig(cwd, program, options = {}) {
   if (!config.secret) {
     console.error('No secret provided');
     return null;
+  }
+
+  if (program.password) {
+    config.secret = endec.decrypt(program.password, config.secret);
   }
 
   return {
