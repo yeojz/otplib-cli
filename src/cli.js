@@ -1,8 +1,10 @@
 /* eslint-disable no-console */
 const program = require('commander');
+const ora = require('ora');
 
 const constants = require('./constants');
 const getConfig = require('./getConfig');
+const endec = require('./endec');
 const generate = require('./generate');
 const initialise = require('./initialise');
 const qrcode = require('./qrcode');
@@ -58,6 +60,28 @@ program
   .action((opts) => (
     qrcode(cwd, program, opts)
   ));
+
+program
+  .command('encrypt [secret]')
+  .description('encrypt secret to store in config')
+  .action((secret, opts) => {
+    if (!program.password) {
+      ora().fail('No password provided');
+      return;
+    }
+    ora().succeed(endec.encrypt(program.password, secret));
+  });
+
+program
+  .command('decrypt [secret]')
+  .description('decrypt secret from config')
+  .action((secret, opts) => {
+    if (!program.password) {
+      ora().fail('No password provided');
+      return;
+    }
+    ora().succeed(endec.decrypt(program.password, secret));
+  });
 
 program.parse(process.argv);
 

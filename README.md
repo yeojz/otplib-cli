@@ -24,6 +24,8 @@ Commands:
   generate [options]        generate new tokens
   verify [options] [token]  validate a token against the setting or configuration
   qrcode [options]          generate a QR Code from configuration
+  encrypt [secret]          encrypt secret to store in config
+  decrypt [secret]          decrypt secret from config
 
 Options:
 
