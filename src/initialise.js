@@ -7,7 +7,6 @@ const fs = require('fs');
 
 const constants = require('./constants');
 const endec = require('./endec');
-const getConfig = require('./getConfig');
 
 function initialise(cwd, program, opts){
   let spinner = ora('Generating config').start();
