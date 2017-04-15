@@ -6,8 +6,9 @@ site
 /docs
 /buildtools
 .babelrc
+.editorconfig
 .eslintignore
-.eslintrc
+.eslintrc.json
 .nycrc
 .travis.yml
 circle.yml

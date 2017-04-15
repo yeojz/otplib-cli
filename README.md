@@ -3,8 +3,6 @@
 > Command-line tool for OTP token generation and verification
 
 [![npm][npm-badge]][npm-link]
-[![Build Status][circle-badge]][circle-link]
-
 
 ## Install
 
@@ -59,6 +57,3 @@ $ otplib qrcode -h
 
 [npm-badge]: https://img.shields.io/npm/v/otplib-cli.svg?style=flat-square
 [npm-link]: https://www.npmjs.com/package/otplib-cli
-
-[circle-badge]: https://img.shields.io/circleci/project/github/yeojz/otplib-cli/master.svg?style=flat-square
-[circle-link]: https://circleci.com/gh/yeojz/otplib-cli.svg

@@ -13,8 +13,6 @@ dependencies:
   cache_directories:
     - ~/.cache/yarn
 test:
-  pre:
-    - yarn run clean
   override:
     - yarn test
     - yarn run lint
@@ -23,8 +21,6 @@ deployment:
     tag: /^v[0-9]+(\.[0-9]+)*$/
     owner: yeojz
     commands:
-      - yarn run clean
-      - yarn run build
-      - echo -e "$NPM_USER\n$NPM_PASS\n$NPM_EMAIL" | yarn login
-      - yarn publish
-      - yarn logout
+      - echo -e "$NPM_USER\n$NPM_PASS\n$NPM_EMAIL" | npm login
+      - npm publish
+      - npm logout

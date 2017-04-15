@@ -823,11 +823,12 @@ os-homedir@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/os-homedir/-/os-homedir-1.0.2.tgz#ffbc4988336e0e833de0c168c7ef152121aa7fb3"
 
-otplib@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/otplib/-/otplib-3.0.1.tgz#0360ffcfe318355c2fd4a5495c1fe067afebdd57"
+otplib@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/otplib/-/otplib-4.0.1.tgz#84d74e4399a601f27f958babab4b5c5315b00b41"
   dependencies:
-    thirty-two "0.0.2"
+    randombytes "^2.0.3"
+    thirty-two "1.0.2"
 
 p-finally@^1.0.0:
   version "1.0.0"
@@ -895,6 +896,10 @@ qrcode@^0.8.1:
     dijkstrajs "^1.0.1"
     isarray "^2.0.1"
     pngjs "^2.3.1"
+
+randombytes@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.0.3.tgz#674c99760901c3c4112771a31e521dc349cc09ec"
 
 readable-stream@^2.2.2:
   version "2.2.9"
@@ -1063,9 +1068,9 @@ text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
-thirty-two@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/thirty-two/-/thirty-two-0.0.2.tgz#4253e29d8cb058f0480267c5698c0e4927e54b6a"
+thirty-two@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/thirty-two/-/thirty-two-1.0.2.tgz#4ca2fffc02a51290d2744b9e3f557693ca6b627a"
 
 through@^2.3.6:
   version "2.3.8"
