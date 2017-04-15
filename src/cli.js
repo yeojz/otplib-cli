@@ -3,7 +3,6 @@ const program = require('commander');
 const ora = require('ora');
 
 const constants = require('./constants');
-const getConfig = require('./getConfig');
 const endec = require('./endec');
 const generate = require('./generate');
 const initialise = require('./initialise');
@@ -64,7 +63,7 @@ program
 program
   .command('encrypt [secret]')
   .description('encrypt secret to store in config')
-  .action((secret, opts) => {
+  .action((secret) => {
     if (!program.password) {
       ora().fail('No password provided');
       return;
@@ -75,7 +74,7 @@ program
 program
   .command('decrypt [secret]')
   .description('decrypt secret from config')
-  .action((secret, opts) => {
+  .action((secret) => {
     if (!program.password) {
       ora().fail('No password provided');
       return;
@@ -87,4 +86,4 @@ program.parse(process.argv);
 
 if (!program.args.length) {
   program.help()
-};
+}
